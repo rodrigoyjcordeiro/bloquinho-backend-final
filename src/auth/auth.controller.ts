@@ -9,7 +9,7 @@ import { GetUser } from 'src/decorators/user.decorator';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
- @Post()
+ @Post('login')
  login(@Body() authDto: AuthDTO ){
   return this.authService.login(authDto)
  }

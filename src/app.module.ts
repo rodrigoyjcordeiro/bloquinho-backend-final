@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -9,17 +9,18 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
+import { ConfigModule } from '@nestjs/config';
 
-// 🔥 Logs detalhados
 mongoose.set('debug', true);
 mongoose.set('strictQuery', false);
 
-const MONGO_URI =
-  'mongodb://rodrigoyjcordeiro_db_user:hAzZcfmp9NFtgGNC@ac-dcnduum-shard-00-00.gvu0blw.mongodb.net:27017,ac-dcnduum-shard-00-01.gvu0blw.mongodb.net:27017,ac-dcnduum-shard-00-02.gvu0blw.mongodb.net:27017/?ssl=true&replicaSet=atlas-jr7kh6-shard-0&authSource=admin&appName=bloquinhodb';
-
 @Module({
   imports: [
-    MongooseModule.forRoot(MONGO_URI, {
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    MongooseModule.forRoot(process.env.MONGO_URI as string, {
       connectionFactory: (connection) => {
         console.log('🔥 connectionFactory executado');
 
@@ -42,6 +43,7 @@ const MONGO_URI =
         return connection;
       },
     }),
+
     UserModule,
     AuthModule,
     PostsModule,
